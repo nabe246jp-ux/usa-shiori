@@ -161,6 +161,32 @@
   .checklist label:has(input:checked) span { text-decoration: line-through; }
   .checklist .cat { font-size: 11px; letter-spacing: 0.25em; color: var(--accent); margin: 20px 0 6px; }
   .checklist .cat:first-child { margin-top: 0; }
+  .checklist label .due {
+    font-size: 11px; font-style: normal; border: 1px solid var(--sub); color: var(--sub);
+    border-radius: 3px; padding: 1px 8px; white-space: nowrap; flex-shrink: 0;
+    font-variant-numeric: tabular-nums; min-width: 84px; text-align: center;
+  }
+  .checklist label .due.urgent { border-color: var(--coral); color: var(--coral); font-weight: 700; }
+  .checklist label .due.key { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  @media (max-width: 480px) {
+    .checklist label { flex-wrap: wrap; gap: 8px 12px; }
+    .checklist label .due { min-width: 0; }
+    .checklist label span { flex: 1 1 100%; }
+  }
+
+  /* ---- カウントダウン ---- */
+  .countdown {
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 6px;
+    box-shadow: var(--shadow); padding: 20px 26px; margin-bottom: 20px;
+  }
+  .countdown .days {
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    font-size: 46px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .countdown .unit { font-size: 15px; color: var(--sub); margin-left: 6px; }
+  .countdown .cd-note { font-size: 13px; color: var(--sub); line-height: 1.8; }
+  .countdown .cd-note #cd-prog { color: var(--ink); font-weight: 600; }
 
   /* ---- タブ（セクション内） ---- */
   .tabs { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 1px solid var(--panel-edge); }
@@ -208,7 +234,8 @@
   </header>
 
   <nav class="top-tabs" role="tablist" aria-label="しおりのセクション">
-    <button role="tab" id="nav-flights" aria-selected="true" aria-controls="flights">フライト</button>
+    <button role="tab" id="nav-todo" aria-selected="true" aria-controls="todo">やること</button>
+    <button role="tab" id="nav-flights" aria-selected="false" aria-controls="flights">フライト</button>
     <button role="tab" id="nav-hotel" aria-selected="false" aria-controls="hotel">ホテル</button>
     <button role="tab" id="nav-rentacar" aria-selected="false" aria-controls="rentacar">レンタカー</button>
     <button role="tab" id="nav-schedule" aria-selected="false" aria-controls="schedule">スケジュール</button>
@@ -217,8 +244,72 @@
     <button role="tab" id="nav-packing" aria-selected="false" aria-controls="packing">持ち物・準備</button>
   </nav>
 
+  <!-- ================= やること ================= -->
+  <section id="todo" role="tabpanel" aria-labelledby="nav-todo">
+    <h2>やること</h2>
+    <p class="section-note">出発（2027年1月6日）までの段取りを、締切の早い順に並べています。チェックはこの端末に保存されます。</p>
+
+    <div class="countdown">
+      <div><span class="days" id="cd-days">—</span><span class="unit">日</span></div>
+      <div class="cd-note">出発 2027年1月6日(水) 14:45 成田発まで<br><span id="cd-prog">—</span></div>
+    </div>
+
+    <div class="alert">
+      <b>先に確認したいこと（1件）：</b>丈青さんは2009年2月生まれなので、学年でいうと<b>高校3年生</b>にあたります（推測です）。2027年の<b>大学入学共通テストは1月16日・17日</b>で、旅行から帰る1月13日の3日後です。もし受験するなら、<b>WEB出願の登録期限が2026年10月2日(金)17時</b>（＝今週）なので、そこだけ先に押さえてください。受験しない場合はこの項目は無視して構いません。
+    </div>
+
+    <div class="checklist">
+      <div class="cat">今週中（〜10/5）</div>
+      <label><input type="checkbox" id="t-kyotsu" data-k="t-kyotsu"><em class="due urgent">10/2(金)17時</em><span>【該当すれば】丈青さんの共通テストWEB出願登録（登録期間 9/15〜10/2）。受験するかどうかを先に確認</span></label>
+      <label><input type="checkbox" id="t-esta" data-k="t-esta"><em class="due urgent">今すぐ</em><span>ESTA 4人分を申請（<a href="https://esta.cbp.dhs.gov" target="_blank" rel="noopener">esta.cbp.dhs.gov</a> 公式のみ・1人 $40.27）。克重さんは新パスポート番号で</span></label>
+      <label><input type="checkbox" id="t-hotel-lv" data-k="t-hotel-lv"><em class="due urgent">今すぐ</em><span>ラスベガスのホテル 1/8・1/9（2泊）。CES週で全市が満室・料金3〜5倍になるので最優先</span></label>
+
+      <div class="cat">10月中</div>
+      <label><input type="checkbox" id="t-flights" data-k="t-flights"><em class="due">10月中</em><span>国内線3区間（1/8 SNA→ラスベガス／1/10 ラスベガス→フェニックス／1/11 フェニックス→LAX）</span></label>
+      <label><input type="checkbox" id="t-hotel-ana" data-k="t-hotel-ana"><em class="due">10月中</em><span>アナハイムのホテル 1/6・1/7（2泊）。1/8の早朝出発なので送迎も確認</span></label>
+      <label><input type="checkbox" id="t-hotel-sed" data-k="t-hotel-sed"><em class="due">10月中</em><span>セドナのホテル 1/10（1泊）</span></label>
+      <label><input type="checkbox" id="t-hotel-lax" data-k="t-hotel-lax"><em class="due">10月中</em><span>LAX空港そばのホテル 1/11（1泊）。朝一の空港シャトルの時刻を確認</span></label>
+      <label><input type="checkbox" id="t-disney" data-k="t-disney"><em class="due">10月中</em><span>ディズニー2日券パークホッパー 4人分（1/6・1/7を日付指定・パーク予約も同時）。<a href="https://disneyland.disney.go.com/ja/" target="_blank" rel="noopener">公式</a></span></label>
+      <label><input type="checkbox" id="t-school" data-k="t-school"><em class="due">10月中</em><span>学校へ欠席の連絡（丈青さん・ゆらいさん）。3学期の始業後なので1/7〜1/13が欠席になる見込み</span></label>
+      <label><input type="checkbox" id="t-work" data-k="t-work"><em class="due">10月中</em><span>1/6〜1/13の不在を社内へ共有。この期間の会議を振り替える（定例の出席者調整）</span></label>
+
+      <div class="cat">11月（★は日時が決まっている）</div>
+      <label><input type="checkbox" id="t-bb6" data-k="t-bb6"><em class="due key">★11/7(土)20時</em><span>Blue Bayou（1/6分）の予約開始。Disneyの外食予約は60日前の米西部時間3時＝日本時間20時から。人気席は数分で埋まる</span></label>
+      <label><input type="checkbox" id="t-bb7" data-k="t-bb7"><em class="due key">★11/8(日)20時</em><span>Blue Bayou（1/7分）の予約開始。1/7の昼食に入れるならこちら</span></label>
+      <label><input type="checkbox" id="t-ces" data-k="t-ces"><em class="due urgent">★11/30(月)</em><span>CES 2027 登録（克重さん）。<b>11/30までなら $149、12/1から $349</b>。業界所属の証明が要る。<a href="https://www.ces.tech/" target="_blank" rel="noopener">CES公式</a></span></label>
+      <label><input type="checkbox" id="t-rentcar" data-k="t-rentcar"><em class="due">11月中</em><span>レンタカー（フェニックス空港 1/10午前〜1/11午後・中型SUV以上・運転者名義のクレカ）</span></label>
+      <label><input type="checkbox" id="t-jeep" data-k="t-jeep"><em class="due">11月中</em><span>ピンクジープ「Broken Arrow」1/11 8:30（4人）。<a href="https://www.pinkadventuretours.com/" target="_blank" rel="noopener">公式</a></span></label>
+      <label><input type="checkbox" id="t-sphere" data-k="t-sphere"><em class="due">11月中</em><span>Sphere 1/8 午前（美貴子さん・丈青さん・ゆらいさん の3人）。<a href="https://www.thesphere.com/" target="_blank" rel="noopener">公式</a></span></label>
+      <label><input type="checkbox" id="t-show" data-k="t-show"><em class="due">11月中</em><span>シルク・ドゥ・ソレイユ 1/9 夜（4人）。「O」か「Mystère」。<a href="https://www.cirquedusoleil.com/las-vegas" target="_blank" rel="noopener">公式</a></span></label>
+      <label><input type="checkbox" id="t-idp" data-k="t-idp"><em class="due">11月中</em><span>国際運転免許証（運転免許センターで即日・2,350円）。年末年始は役所が閉まるので早めに</span></label>
+
+      <div class="cat">12月（年末年始前に終わらせる）</div>
+      <label><input type="checkbox" id="t-omega" data-k="t-omega"><em class="due">12月上旬</em><span>Omega Mart（AREA15）1/9 午前（3人）</span></label>
+      <label><input type="checkbox" id="t-bacchanal" data-k="t-bacchanal"><em class="due">12月上旬</em><span>Bacchanal Buffet 1/8 夜（4人）。CES週は満席になる</span></label>
+      <label><input type="checkbox" id="t-elote" data-k="t-elote"><em class="due">12月上旬</em><span>Elote Café（セドナ）1/10 夜（4人）</span></label>
+      <label><input type="checkbox" id="t-insurance" data-k="t-insurance"><em class="due">12月中</em><span>海外旅行保険。まずクレジットカード付帯で足りるか確認（米国の医療費は高額）</span></label>
+      <label><input type="checkbox" id="t-sim" data-k="t-sim"><em class="due">12月中</em><span>eSIM（Ubigi／Airalo等）か海外ローミングの手配</span></label>
+      <label><input type="checkbox" id="t-club" data-k="t-club"><em class="due">12月中</em><span>ZIP Point Club 会員情報のパスポートを新しいものに更新（8/26の期限メールを止める）</span></label>
+      <label><input type="checkbox" id="t-card" data-k="t-card"><em class="due">12月中</em><span>クレジットカードの海外利用設定・限度額の確認</span></label>
+      <label><input type="checkbox" id="t-clothes" data-k="t-clothes"><em class="due">12月中</em><span>防寒着の用意（セドナは朝晩−2℃。ダウン・手袋・ニット帽を4人分）</span></label>
+      <label><input type="checkbox" id="t-medicine" data-k="t-medicine"><em class="due">12月中</em><span>常備薬・子どもの薬・酔い止め（ジープ用）の補充</span></label>
+
+      <div class="cat">出発の週（12/29〜1/5）</div>
+      <label><input type="checkbox" id="t-travelinfo" data-k="t-travelinfo"><em class="due">〜1/4</em><span>ZIPAIRの「渡航情報」を4人とも<b>登録完了</b>に（滞在先住所＝アナハイムのホテル住所）。これが済まないとモバイルチェックインが使えない</span></label>
+      <label><input type="checkbox" id="t-vjw" data-k="t-vjw"><em class="due">〜1/5</em><span>Visit Japan Web に帰国の税関申告を登録（任意。空港が早く済む）</span></label>
+      <label><input type="checkbox" id="t-pack" data-k="t-pack"><em class="due">〜1/5</em><span>荷造り（「持ち物・準備」タブを見ながら）。モバイルバッテリーは機内持込へ</span></label>
+      <label><input type="checkbox" id="t-house" data-k="t-house"><em class="due">〜1/5</em><span>家の戸締まり・郵便や宅配の停止・ゴミ出し</span></label>
+      <label><input type="checkbox" id="t-checkin1" data-k="t-checkin1"><em class="due key">★1/5(火)14:45</em><span>往路のモバイルチェックイン開始（出発24時間前）</span></label>
+
+      <div class="cat">現地でやること</div>
+      <label><input type="checkbox" id="t-dob" data-k="t-dob"><em class="due urgent">★1/6 11:45</em><span>成田のZIPAIRカウンターで「丈青の生年月日を2009年2月28日に訂正してください」と申し出る（Webでは直せない・ZIPAIR回答 9/24）</span></label>
+      <label><input type="checkbox" id="t-badge" data-k="t-badge"><em class="due">1/8 朝</em><span>CESバッジの受け取り（事前受取でなければ会場で。混むので早めに）</span></label>
+      <label><input type="checkbox" id="t-checkin2" data-k="t-checkin2"><em class="due key">★1/11 9:40</em><span>復路のモバイルチェックイン開始（ロサンゼルス時間）</span></label>
+    </div>
+  </section>
+
   <!-- ================= フライト ================= -->
-  <section id="flights" role="tabpanel" aria-labelledby="nav-flights">
+  <section id="flights" role="tabpanel" aria-labelledby="nav-flights" hidden>
     <h2>フライト</h2>
     <p class="section-note">国際線：ZIPAIR ／ Boeing 787 ／ ZIP Full-Flat（Premiumパッケージ）｜ <a href="https://www.zipair.net/ja/flight/search" target="_blank" rel="noopener">ZIPAIR 予約の確認（予約番号＋TANABE＋KATSUSHIGE）</a></p>
 
@@ -979,23 +1070,8 @@
         <label><input type="checkbox" id="c-sim" data-k="sim"><span>eSIM（Ubigi／Airalo等）か海外ローミング。セドナ周辺はオフライン地図もDL</span></label>
         <div class="cat">健康・薬</div>
         <label><input type="checkbox" id="c-medicine" data-k="medicine"><span>常備薬・子どもの薬・絆創膏・酔い止め（ジープ）</span></label>
-        <div class="cat">予約（期限順）</div>
-        <label><input type="checkbox" id="c-hotel-lv" data-k="hotel-lv"><span>【今すぐ】ラスベガスのホテル 1/8・1/9</span></label>
-        <label><input type="checkbox" id="c-flights" data-k="flights"><span>【10月】国内線3区間（1/8 SNA→LAS／1/10 LAS→PHX／1/11 PHX→LAX）</span></label>
-        <label><input type="checkbox" id="c-hotel-ana" data-k="hotel-ana"><span>【10月】アナハイムのホテル 1/6・1/7</span></label>
-        <label><input type="checkbox" id="c-hotel-sed" data-k="hotel-sed"><span>【10月】セドナのホテル 1/10</span></label>
-        <label><input type="checkbox" id="c-hotel-lax" data-k="hotel-lax"><span>【10月】LAX空港そばのホテル 1/11</span></label>
-        <label><input type="checkbox" id="c-disney" data-k="disney"><span>【11月】ディズニー2日券パークホッパー 4人分（1/6・1/7指定・パーク予約も）</span></label>
-        <label><input type="checkbox" id="c-jeep" data-k="jeep"><span>【11月】Pink Jeep「Broken Arrow」1/11 朝</span></label>
-        <label><input type="checkbox" id="c-sphere" data-k="sphere"><span>【11月】Sphere 1/8 昼（家族3人）</span></label>
-        <label><input type="checkbox" id="c-show" data-k="show"><span>【11月】シルク・ドゥ・ソレイユ 1/9 夜（4人）</span></label>
-        <label><input type="checkbox" id="c-omega" data-k="omega"><span>【12月】Omega Mart 1/9 午前（家族3人）</span></label>
-        <label><input type="checkbox" id="c-resto" data-k="resto"><span>【12月】レストラン予約（Blue Bayou 1/7・Bacchanal 1/8・Elote 1/10）</span></label>
-        <div class="cat">出発前にやること</div>
-        <label><input type="checkbox" id="c-checkin1" data-k="checkin1"><span>往路モバイルチェックイン（1/5 14:45〜可能）</span></label>
-        <label><input type="checkbox" id="c-checkin2" data-k="checkin2"><span>復路モバイルチェックイン（1/11 9:40〜可能・LA時間）</span></label>
-        <label><input type="checkbox" id="c-vjw" data-k="vjw"><span>Visit Japan Web に帰国の税関申告を登録（任意・空港で早い）</span></label>
       </div>
+      <p class="section-note" style="margin-top:16px">予約・手続きの期限つきの「やること」は <b>「やること」タブ</b>にまとめています。</p>
     </div>
 
     <div class="tabpanel" id="panel-nice" role="tabpanel" aria-labelledby="tab-nice" hidden>
@@ -1060,14 +1136,33 @@
     var KEY = "usa-2027-checklist";
     var saved = {};
     try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
-    var boxes = document.querySelectorAll("#packing input[type=checkbox]");
+    var boxes = document.querySelectorAll(".checklist input[type=checkbox]");
+    var todoBoxes = document.querySelectorAll("#todo .checklist input[type=checkbox]");
+    var prog = document.getElementById("cd-prog");
+    function updateProgress() {
+      if (!prog) return;
+      var done = 0;
+      todoBoxes.forEach(function (b) { if (b.checked) done++; });
+      prog.textContent = "やること " + done + " / " + todoBoxes.length + " 件 完了";
+    }
     boxes.forEach(function (box) {
       if (saved[box.dataset.k]) box.checked = true;
       box.addEventListener("change", function () {
         saved[box.dataset.k] = box.checked;
         try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+        updateProgress();
       });
     });
+    updateProgress();
+
+    var cdDays = document.getElementById("cd-days");
+    if (cdDays) {
+      var dep = new Date(2027, 0, 6);
+      var now = new Date();
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var diff = Math.round((dep - today) / 86400000);
+      cdDays.textContent = diff > 0 ? diff : 0;
+    }
 
     document.querySelectorAll('[role="tablist"]').forEach(function (list) {
       var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
